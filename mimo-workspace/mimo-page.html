@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiMo 生成的页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #2196F3;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .feature-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: #e8f5e9;
+        }
+        
+        .feature-item .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #fff3e0;
+            border-radius: 12px;
+            min-height: 80px;
+            border: 2px dashed #FF9800;
+            transition: all 0.3s ease;
+        }
+        
+        #result h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+        
+        #clock {
+            font-size: 3em;
+            color: #667eea;
+            text-align: center;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 500px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 MiMo 智能助手</h1>
+        <p class="subtitle">✨ 由小米公司开发的代码助手为你生成 ✨</p>
+        
+        <div class="card">
+            <h2>👋 欢迎访问！</h2>
+            <p>这是一个由 <strong>MiMo</strong> 自动生成的 HTML 页面，具有丰富的交互功能。点击下方按钮来体验不同的效果！</p>
+        </div>
+        
+        <div class="features">
+            <div class="feature-item">
+                <div class="icon">🎨</div>
+                <h3>精美设计</h3>
+                <p>现代化 UI 风格</p>
+            </div>
+            <div class="feature-item">
+                <div class="icon">⚡</div>
+                <h3>流畅动画</h3>
+                <p>CSS3 动画效果</p>
+            </div>
+            <div class="feature-item">
+                <div class="icon">📱</div>
+                <h3>响应式布局</h3>
+                <p>适配各种屏幕</p>
+            </div>
+            <div class="feature-item">
+                <div class="icon">🔧</div>
+                <h3>交互功能</h3>
+                <p>JavaScript 动态</p>
+            </div>
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="showTime()">⏰ 显示时间</button>
+            <button class="btn btn-success" onclick="randomColor()">🎨 随机颜色</button>
+            <button class="btn btn-warning" onclick="showMessage()">💬 弹出消息</button>
+            <button class="btn btn-primary" onclick="startClock()">⏱️ 实时时钟</button>
+        </div>
+        
+        <div id="result">
+            <h3>📋 结果显示区域</h3>
+            <p>点击上面的按钮，这里会显示结果...</p>
+        </div>
+        
+        <footer>
+            <p>🚀 MiMo 智能助手制作 | 小米公司出品</p>
+            <p>© 2024 All Rights Reserved</p>
+        </footer>
+    </div>
+
+    <script>
+        let clockInterval = null;
+        
+        function showTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                weekday: 'long',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            const timeStr = now.toLocaleString('zh-CN', options);
+            
+            document.getElementById('result').innerHTML = `
+                <h3>⏰ 当前时间</h3>
+                <p style="font-size: 1.2em;">${timeStr}</p>
+            `;
+            
+            if (clockInterval) {
+                clearInterval(clockInterval);
+                clockInterval = null;
+            }
+        }
+        
+        function randomColor() {
+            const colors = [
+                ['#FF6B6B', '#EE5A24'],
+                ['#48DBFB', '#0ABDE3'],
+                ['#FF9FF3', '#F368E0'],
+                ['#54A0FF', '#2E86DE'],
+                ['#5F27CD', '#341F97'],
+                ['#01A3A4', '#00B894'],
+                ['#FFC312', '#F79F1F'],
+                ['#EA2027', '#B71540']
+            ];
+            
+            const randomPair = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.background = `linear-gradient(135deg, ${randomPair[0]} 0%, ${randomPair[1]} 100%)`;
+            
+            document.getElementById('result').innerHTML = `
+                <h3>🎨 颜色已改变！</h3>
+                <p>新的渐变色：${randomPair[0]} → ${randomPair[1]}</p>
+            `;
+        }
+        
+        function showMessage() {
+            const messages = [
+                '🌟 MiMo 祝你今天开心！',
+                '💻 编程让生活更美好！',
+                '🚀 保持学习，不断进步！',
+                '🎯 坚持就是胜利！',
+                '✨ 你是最棒的！',
+                '🔥 加油，未来可期！'
+            ];
+            
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            alert(randomMsg);
+            
+            document.getElementById('result').innerHTML = `
+                <h3>💬 消息提示</h3>
+                <p>${randomMsg}</p>
+            `;
+        }
+        
+        function startClock() {
+            if (clockInterval) {
+                clearInterval(clockInterval);
+            }
+            
+            document.getElementById('result').innerHTML = `
+                <h3>⏱️ 实时时钟</h3>
+                <div id="clock">--:--:--</div>
+                <p style="text-align: center; margin-top: 10px;">（点击其他按钮停止时钟）</p>
+            `;
+            
+            function updateClock() {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('zh-CN');
+                const clockEl = document.getElementById('clock');
+                if (clockEl) {
+                    clockEl.textContent = timeStr;
+                }
+            }
+            
+            updateClock();
+            clockInterval = setInterval(updateClock, 1000);
+        }
+        
+        window.onload = function() {
+            document.getElementById('result').innerHTML = `
+                <h3>🚀 页面加载完成！</h3>
+                <p>欢迎使用 MiMo 生成的 HTML 页面！请尝试点击上方的各种按钮来体验不同的功能。</p>
+            `;
+        };
+    </script>
+</body>
+</html>

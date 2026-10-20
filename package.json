@@ -1,0 +1,35 @@
+{
+  "name": "mimo-assistant",
+  "version": "1.0.0",
+  "description": "MiMo 大模型桌面智能助手",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder"
+  },
+  "keywords": ["mimo", "ai", "assistant", "desktop"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "uuid": "^10.0.0"
+  },
+  "build": {
+    "appId": "com.mimo.assistant",
+    "productName": "MiMo Assistant",
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "files": [
+      "electron/**/*",
+      "src/**/*",
+      "build/**/*",
+      "package.json"
+    ]
+  }
+}

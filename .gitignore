@@ -1,0 +1,29 @@
+node_modules/
+dist/
+out/
+build/
+*.log
+*.tmp
+*.bak
+.DS_Store
+
+# 运行时数据（含 config.json 中的 API Key，禁止提交）
+data/
+.reasonix/
+reasonix.toml
+
+# 环境与密钥
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# IDE / 工具残留
+.idea/
+.vscode/
+.trae/
+.rivet/
+*.swp
+*~
+

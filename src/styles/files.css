@@ -1,0 +1,89 @@
+/* ===== 文件视图 ===== */
+
+.file-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  flex-shrink: 0;
+}
+
+.file-toolbar #filePath {
+  flex: 1;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0 4px;
+}
+
+.file-toolbar-actions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.file-toolbar .icon-btn {
+  padding: 4px;
+}
+
+#fileView {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+}
+
+#fileView.active {
+  display: flex;
+}
+
+#fileHeader {
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-primary);
+}
+
+#fileHeader h1 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.file-actions {
+  display: flex;
+  gap: 8px;
+}
+
+#fileEditorContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#fileEditor {
+  flex: 1;
+  padding: 20px 24px;
+  background: var(--bg-primary);
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  tab-size: 2;
+  outline: none;
+  resize: none;
+}
+
+#fileEditor:focus {
+  border: none;
+}
+
+#fileEditor::placeholder {
+  color: var(--text-tertiary);
+}

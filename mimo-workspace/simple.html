@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单可执行HTML页面</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 40px;
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .demo-area {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            min-height: 50px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: white;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 简单可执行HTML页面</h1>
+        
+        <div class="demo-area">
+            <h2>这是一个可交互的HTML页面示例</h2>
+            <p>点击下面的按钮来测试不同的功能：</p>
+            
+            <button class="btn" onclick="showTime()">显示当前时间</button>
+            <button class="btn btn-secondary" onclick="changeColor()">改变背景颜色</button>
+            <button class="btn" onclick="showAlert()">显示警告框</button>
+        </div>
+        
+        <div class="feature-list">
+            <div class="feature-item">
+                <h3>📱 响应式设计</h3>
+                <p>适配各种设备</p>
+            </div>
+            <div class="feature-item">
+                <h3>🎨 现代UI</h3>
+                <p>漂亮的渐变效果</p>
+            </div>
+            <div class="feature-item">
+                <h3>⚡ 交互功能</h3>
+                <p>JavaScript动态效果</p>
+            </div>
+        </div>
+        
+        <div id="output">
+            <p>输出区域：点击按钮后这里会显示结果</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>MiMo 智能助手制作 | 可直接保存为HTML文件运行</p>
+    </footer>
+
+    <script>
+        function showTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('zh-CN');
+            const dateString = now.toLocaleDateString('zh-CN');
+            document.getElementById('output').innerHTML = `
+                <h3>⏰ 当前时间</h3>
+                <p>时间：${timeString}</p>
+                <p>日期：${dateString}</p>
+            `;
+        }
+        
+        function changeColor() {
+            const colors = [
+                'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+                'linear-gradient(135deg, #ee0979 0%, #ff6a00 100%)',
+                'linear-gradient(135deg, #fc5c7d 0%, #6a82fb 100%)',
+                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+            ];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.background = randomColor;
+            document.getElementById('output').innerHTML = `
+                <h3>🎨 背景已改变</h3>
+                <p>页面背景颜色已更新为新的渐变效果！</p>
+            `;
+        }
+        
+        function showAlert() {
+            alert('👋 你好！这是一个HTML页面的警告框示例。\n\n你可以：\n1. 保存这个文件为.html格式\n2. 用浏览器直接打开\n3. 尝试所有的按钮功能');
+            document.getElementById('output').innerHTML = `
+                <h3>💬 警告框已显示</h3>
+                <p>你刚刚看到了一个JavaScript警告框！</p>
+            `;
+        }
+        
+        // 页面加载时的欢迎消息
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('output').innerHTML = `
+                    <h3>🚀 页面已准备就绪</h3>
+                    <p>欢迎使用这个HTML页面示例！</p>
+                    <p>所有功能都可以正常工作，试试上面的按钮吧！</p>
+                `;
+            }, 500);
+        };
+    </script>
+</body>
+</html>

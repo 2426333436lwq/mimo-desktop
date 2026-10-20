@@ -1,0 +1,62 @@
+/* ============================================================
+   终端面板样式
+   说明：终端已嵌入右侧面板（#rpTerminal），相关样式（#terminalOutput、
+   .terminal-output-line、.terminal-input-row、.terminal-cwd、#terminalInput
+   等）统一定义在 right-panel.css 中，本文件仅保留补充样式。
+   ============================================================ */
+
+/* 终端清空按钮提示 */
+#terminalClearBtn:hover,
+#terminalCopyBtn:hover,
+#terminalPauseBtn:hover,
+#terminalFollowBtn:hover {
+  color: var(--accent);
+}
+
+#terminalFollowBtn.active {
+  color: var(--accent);
+}
+
+#terminalPauseBtn.active {
+  color: var(--warning);
+}
+
+/* 底部"输出暂停"提示条 */
+.terminal-follow-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border-top: 1px solid var(--border-color);
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.terminal-follow-hint:hover {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* 终端输出滚动条 */
+#terminalOutput::-webkit-scrollbar {
+  width: 8px;
+}
+
+#terminalOutput::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#terminalOutput::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+#terminalOutput::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}

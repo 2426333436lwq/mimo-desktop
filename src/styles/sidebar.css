@@ -1,0 +1,655 @@
+/* ============================================================
+   左侧边栏样式
+   - 顶部 Tab（会话/文件/技能）
+   - 会话列表（搜索 + 时间分组 + 置顶）
+   - 文件树（图标区分 + 状态色 + 右键菜单）
+   - 技能库（卡片展示 + 搜索）
+   ============================================================ */
+
+.sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  flex-shrink: 0;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 4px;
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all var(--transition);
+  border-bottom: 2px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.tab-btn:hover {
+  color: var(--text-secondary);
+}
+
+.tab-btn.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent);
+}
+
+.tab-btn span {
+  font-size: 12px;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.tab-content {
+  display: none;
+  height: 100%;
+}
+
+.tab-content.active {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- 搜索框 ---------- */
+.sidebar-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-tertiary);
+}
+
+.sidebar-search input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 4px 0;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.sidebar-search input:focus {
+  outline: none;
+  border: none;
+}
+
+.sidebar-search input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* ============================================================
+   会话列表
+   ============================================================ */
+#topicsContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 4px;
+}
+
+.topic-group {
+  margin-bottom: 4px;
+}
+
+.topic-group-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  padding: 8px 12px 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  user-select: none;
+}
+
+.topic-item {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  margin: 2px 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background var(--transition);
+  position: relative;
+}
+
+.topic-item:hover {
+  background: var(--bg-hover);
+}
+
+.topic-item.active {
+  background: var(--bg-active);
+}
+
+.topic-item.pinned {
+  background: var(--accent-light);
+}
+
+.topic-item.pinned::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+}
+
+.topic-type-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.topic-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.topic-time {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  line-height: 1;
+}
+
+.topic-pin {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: all var(--transition);
+}
+
+.topic-item:hover .topic-pin,
+.topic-item.pinned .topic-pin {
+  opacity: 1;
+}
+
+.topic-pin:hover {
+  background: var(--bg-hover);
+  color: var(--accent);
+}
+
+.topic-item.pinned .topic-pin {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.topic-load-more {
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  margin: 4px;
+  transition: background var(--transition);
+}
+
+.topic-load-more:hover {
+  background: var(--bg-hover);
+}
+
+.search-highlight {
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.topic-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+
+.topic-item.active .topic-icon {
+  color: var(--accent);
+}
+
+.topic-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.topic-title {
+  font-size: 13px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.topic-meta {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topic-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.topic-item:hover .topic-actions,
+.topic-item.active .topic-actions {
+  opacity: 1;
+}
+
+.topic-pin,
+.topic-delete {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.topic-pin:hover {
+  background: var(--bg-tertiary);
+  color: var(--accent);
+}
+
+.topic-pin.active {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.topic-delete:hover {
+  background: var(--danger);
+  color: white;
+}
+
+/* 话题标题来源徽章（手动命名标记） */
+.topic-source-badge {
+  font-size: 9px;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 1px 4px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-left: -2px;
+}
+
+/* 话题重命名输入框（双击标题触发） */
+.topic-rename-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-family: inherit;
+  outline: none;
+}
+
+.no-topics {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+.no-topics-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+  display: block;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   文件树
+   ============================================================ */
+.file-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.file-path {
+  flex: 1;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-mono);
+}
+
+#fileTree {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  transition: background var(--transition);
+  position: relative;
+  user-select: none;
+}
+
+.file-item:hover {
+  background: var(--bg-hover);
+}
+
+.file-item.active {
+  background: var(--bg-active);
+}
+
+.file-item.is-dir {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.file-item-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+
+.file-item.is-dir .file-item-icon {
+  color: var(--accent);
+}
+
+/* 文件类型图标颜色 */
+.file-item-icon.js { color: #f7df1e; }
+.file-item-icon.ts { color: #3178c6; }
+.file-item-icon.json { color: #f59e0b; }
+.file-item-icon.md { color: #6366f1; }
+.file-item-icon.css { color: #1572b6; }
+.file-item-icon.html { color: #e34c26; }
+.file-item-icon.py { color: #3572a5; }
+.file-item-icon.image { color: #ec4899; }
+
+.file-item-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-item-size {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+/* 文件状态色（绿新增/黄改/灰删） */
+.file-item-status {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.file-item-status.added { background: var(--success); }
+.file-item-status.modified { background: var(--warning); }
+.file-item-status.deleted { background: var(--text-tertiary); }
+
+/* 文件夹展开/折叠箭头 */
+.file-item .chevron {
+  width: 10px;
+  height: 10px;
+  transition: transform var(--transition);
+  color: var(--text-tertiary);
+}
+
+.file-item.expanded .chevron {
+  transform: rotate(90deg);
+}
+
+.file-tree-children {
+  padding-left: 12px;
+  display: none;
+}
+
+.file-tree-children.expanded {
+  display: block;
+}
+
+.no-files {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+.no-files-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+  display: block;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   技能库
+   ============================================================ */
+#skillsContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.skill-card {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+}
+
+.skill-card:hover {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+  transform: translateY(-1px);
+}
+
+.skill-card.active {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.skill-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.skill-card-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.skill-card-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skill-card-desc {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.skill-card-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.skill-tag {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.no-skills {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+.no-skills-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+  display: block;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   侧边栏底部
+   ============================================================ */
+.sidebar-footer {
+  padding: 10px 12px;
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.sidebar-btn {
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  transition: all var(--transition);
+}
+
+.sidebar-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+
+/* ============================================================
+   文件编辑视图（保留旧版文件编辑器，仍可使用）
+   ============================================================ */
+#fileView {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+}
+
+#fileView.active {
+  display: flex;
+}
+
+#fileHeader {
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-primary);
+}
+
+#fileHeader h1 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.file-actions {
+  display: flex;
+  gap: 8px;
+}
+
+#fileEditorContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#fileEditor {
+  flex: 1;
+  padding: 20px 24px;
+  background: var(--bg-primary);
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  tab-size: 2;
+  outline: none;
+  resize: none;
+}
+
+#fileEditor:focus {
+  border: none;
+}
+
+#fileEditor::placeholder {
+  color: var(--text-tertiary);
+}

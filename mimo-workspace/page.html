@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiMo 智能助手</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            animation: slideUp 0.6s ease-out;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 { color: #667eea; margin-bottom: 10px; font-size: 2em; }
+        .subtitle { color: #999; margin-bottom: 25px; }
+        .clock {
+            font-size: 3em;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 25px; }
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .btn1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .btn2 { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .btn3 { background: linear-gradient(135deg, #ee0979, #ff6a00); }
+        #output {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            text-align: left;
+            min-height: 60px;
+        }
+        footer { margin-top: 25px; color: #aaa; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🎉 MiMo 智能助手</h1>
+        <p class="subtitle">小米公司出品 | 代码开发助手</p>
+        <div class="clock" id="clock">--:--:--</div>
+        <div class="btn-group">
+            <button class="btn btn1" onclick="showTime()">⏰ 显示时间</button>
+            <button class="btn btn2" onclick="randomFact()">💡 随机知识</button>
+            <button class="btn btn3" onclick="changeBg()">🎨 换背景</button>
+        </div>
+        <div id="output">✨ 点击按钮探索更多功能...</div>
+        <footer>© 2024 MiMo 智能助手 | 小米公司</footer>
+    </div>
+    <script>
+        setInterval(() => {
+            document.getElementById('clock').textContent = new Date().toLocaleTimeString('zh-CN');
+        }, 1000);
+        
+        function showTime() {
+            const now = new Date();
+            document.getElementById('output').innerHTML = 
+                '<h3>⏰ 当前时间信息</h3>' +
+                '<p>📅 日期：' + now.toLocaleDateString('zh-CN') + '</p>' +
+                '<p>🕐 时间：' + now.toLocaleTimeString('zh-CN') + '</p>' +
+                '<p>📊 星期：' + ['日','一','二','三','四','五','六'][now.getDay()] + '</p>';
+        }
+        
+        function randomFact() {
+            const facts = [
+                '🌍 地球上每天约有86,400秒',
+                '🧠 人脑约有860亿个神经元',
+                '💻 全球约有110亿台联网设备',
+                '🌟 银河系约有2000亿颗恒星',
+                '📱 全球约有68亿智能手机用户',
+                '🤖 AI技术正在改变每个行业',
+                '🚀 光速约为每秒30万公里'
+            ];
+            document.getElementById('output').innerHTML = 
+                '<h3>💡 随机知识</h3><p>' + 
+                facts[Math.floor(Math.random() * facts.length)] + '</p>';
+        }
+        
+        function changeBg() {
+            const gradients = [
+                'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+                'linear-gradient(135deg, #ee0979 0%, #ff6a00 100%)',
+                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+            ];
+            const bg = gradients[Math.floor(Math.random() * gradients.length)];
+            document.body.style.background = bg;
+            document.getElementById('output').innerHTML = 
+                '<h3>🎨 背景已更换</h3><p>新的渐变背景已应用！</p>';
+        }
+    </script>
+</body>
+</html>

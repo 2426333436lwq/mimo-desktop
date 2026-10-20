@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiMo 演示页面</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 { color: #667eea; margin-bottom: 20px; }
+        .time { font-size: 2.5em; color: #333; margin: 20px 0; font-family: monospace; }
+        .btn {
+            padding: 12px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .btn:hover { transform: translateY(-3px); }
+        .btn1 { background: #667eea; color: white; }
+        .btn2 { background: #764ba2; color: white; }
+        #output { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 MiMo 生成的页面</h1>
+        <p>这是一个由 MiMo 创建的演示页面</p>
+        <div class="time" id="clock">--:--:--</div>
+        <button class="btn btn1" onclick="updateTime()">⏰ 更新时间</button>
+        <button class="btn btn2" onclick="sayHello()">👋 打招呼</button>
+        <div id="output">点击按钮试试看！</div>
+    </div>
+    <script>
+        function updateTime() {
+            document.getElementById('clock').textContent = new Date().toLocaleTimeString('zh-CN');
+            document.getElementById('output').innerHTML = '✅ 时间已更新！';
+        }
+        function sayHello() {
+            document.getElementById('output').innerHTML = '👋 你好！我是 MiMo 智能助手！';
+        }
+        setInterval(() => {
+            document.getElementById('clock').textContent = new Date().toLocaleTimeString('zh-CN');
+        }, 1000);
+    </script>
+</body>
+</html>

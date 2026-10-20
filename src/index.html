@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MiMo Assistant</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/sidebar.css">
+  <link rel="stylesheet" href="styles/chat.css">
+  <link rel="stylesheet" href="styles/files.css">
+  <link rel="stylesheet" href="styles/right-panel.css">
+  <link rel="stylesheet" href="styles/settings.css">
+  <link rel="stylesheet" href="styles/terminal.css">
+</head>
+<body>
+  <div id="app">
+    <!-- ============== 顶部导航栏 ============== -->
+    <header id="topBar">
+      <div class="topbar-brand">
+        <span class="brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="6" fill="url(#mimo-g)"/>
+            <path d="M6 17V7L12 12L18 7V17" stroke="white" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+            <circle cx="12" cy="17" r="1.3" fill="white"/>
+            <defs>
+              <linearGradient id="mimo-g" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#667EEA"/>
+                <stop offset="1" stop-color="#764BA2"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        <span class="brand-text">MiMo</span>
+      </div>
+
+      <div class="topbar-group">
+        <div class="topbar-dropdown-wrap">
+          <button id="newTopicBtn" class="topbar-btn" title="新建会话 (Ctrl+N)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            <span>新建会话</span>
+            <svg class="caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="newTopicDropdown" class="model-dropdown hidden" style="position:absolute;"></div>
+        </div>
+        <button id="openProjectBtn" class="topbar-btn" title="打开本地项目">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>打开项目</span>
+        </button>
+        <div class="topbar-dropdown-wrap">
+          <button id="clearChatBtn" class="topbar-btn" title="清空当前对话">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+            </svg>
+            <span>清空对话</span>
+            <svg class="caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="clearChatDropdown" class="model-dropdown hidden" style="position:absolute;"></div>
+        </div>
+        <button id="planModeBtn" class="topbar-btn" title="计划模式：先出计划，批准后才执行（对标 Reasonix Plan Mode）">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          <span id="planModeLabel">计划</span>
+        </button>
+      </div>
+
+      <div class="topbar-spacer"></div>
+
+      <div class="topbar-group">
+        <!-- 模型切换下拉 -->
+        <div id="modelSwitcher" class="model-switcher">
+          <button id="modelSwitcherBtn" class="model-switcher-btn" title="切换模型">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/>
+            </svg>
+            <span id="currentModelName">mimo-v2.5</span>
+            <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div id="modelDropdown" class="model-dropdown hidden"></div>
+        </div>
+
+        <button id="settingsBtn" class="topbar-btn" title="设置">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+
+        <button id="toggleSidebarBtn" class="topbar-btn" title="收起/展开侧边栏">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <line x1="9" y1="3" x2="9" y2="21"/>
+          </svg>
+        </button>
+
+        <button id="toggleRightPanelBtn" class="topbar-btn" title="收起/展开右侧面板">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <line x1="15" y1="3" x2="15" y2="21"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="window-controls">
+        <button id="pinTopBtn" class="window-ctrl-btn" title="窗口置顶">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 17v5"/>
+            <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>
+          </svg>
+        </button>
+        <button id="minimizeBtn" class="window-ctrl-btn" title="最小化">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+        <button id="closeBtn" class="window-ctrl-btn close" title="关闭">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 断网提示条 -->
+    <div id="networkBar" class="network-bar">
+      <div class="network-bar-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <div class="network-bar-text" id="networkBarText">网络连接不稳定，部分功能可能受限</div>
+      <button class="network-bar-action" id="networkBarAction">重试</button>
+    </div>
+
+    <!-- ============== 主体三栏 ============== -->
+    <div id="bodyContainer">
+      <!-- 左侧边栏 -->
+      <aside id="sidebar">
+        <div class="sidebar-tabs">
+          <button class="tab-btn active" data-tab="topics">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>会话</span>
+          </button>
+          <button class="tab-btn" data-tab="files">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>文件</span>
+          </button>
+          <button class="tab-btn" data-tab="skills">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
+            <span>技能</span>
+          </button>
+        </div>
+
+        <div class="sidebar-content">
+          <!-- 会话列表 -->
+          <div id="topicsList" class="tab-content active">
+            <div class="sidebar-search">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input id="topicSearchInput" type="search" placeholder="搜索会话..." />
+            </div>
+            <div id="topicsContainer"></div>
+          </div>
+
+          <!-- 文件浏览器 -->
+          <div id="filesList" class="tab-content">
+            <div class="file-toolbar">
+              <button id="fileBackBtn" class="icon-btn" title="返回上级">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+              </button>
+              <span id="filePath" class="file-path"></span>
+              <div class="file-toolbar-actions">
+                <button id="fileExpandAllBtn" class="icon-btn" title="全部展开">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+                <button id="fileCollapseAllBtn" class="icon-btn" title="全部折叠">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="18 15 12 9 6 15"/>
+                  </svg>
+                </button>
+                <button id="fileSelectBtn" class="icon-btn" title="选择目录">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                  </svg>
+                </button>
+                <button id="fileRefreshBtn" class="icon-btn" title="刷新">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 4 23 10 17 10"/>
+                    <polyline points="1 20 1 14 7 14"/>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div id="fileTree"></div>
+          </div>
+
+          <!-- 技能库 -->
+          <div id="skillsList" class="tab-content">
+            <div class="sidebar-search">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input id="skillSearchInput" type="search" placeholder="搜索技能..." />
+            </div>
+            <div id="skillsContainer"></div>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <button id="settingsBtn2" class="sidebar-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>设置</span>
+          </button>
+        </div>
+
+        <div class="sidebar-resizer" id="sidebarResizer"></div>
+      </aside>
+
+      <!-- 中间主区域 -->
+      <main id="mainArea">
+        <!-- 对话视图 -->
+        <section id="chatView" class="view active">
+          <header id="chatHeader">
+            <div class="chat-header-left">
+              <h1 id="topicTitle">新对话</h1>
+              <span id="topicMeta" class="chat-header-meta"></span>
+            </div>
+            <div class="header-actions">
+              <button id="exportBtn" class="icon-btn" title="导出对话">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+              </button>
+              <button id="toggleTerminalBtn" class="icon-btn" title="切换终端">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="4 17 10 11 4 5"/>
+                  <line x1="12" y1="19" x2="20" y2="19"/>
+                </svg>
+              </button>
+            </div>
+          </header>
+
+          <div id="chatMessages"></div>
+
+          <!-- 任务规划面板（前端只渲染不执行） -->
+          <div id="planPanel" class="plan-panel hidden"></div>
+
+          <div id="chatInputArea">
+            <div id="permissionBar" class="hidden">
+              <span id="permissionText">MiMo 请求执行：</span>
+              <div class="permission-actions">
+                <button id="permissionAllow" class="btn btn-primary btn-sm">允许</button>
+                <button id="permissionDeny" class="btn btn-secondary btn-sm">拒绝</button>
+              </div>
+            </div>
+
+            <div class="composer-card">
+              <div class="composer">
+                <div class="composer__input-row">
+                  <div class="composer__content">
+                    <textarea id="chatInput" class="composer__input" placeholder="输入消息… (Enter 发送 · Shift+Enter 换行 · Ctrl+Enter 也可发送)" rows="1"></textarea>
+                  </div>
+                  <button id="sendBtn" class="composer__btn composer__btn--send" title="发送">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="22" y1="2" x2="11" y2="13"/>
+                      <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                  </button>
+                  <button id="stopBtn" class="composer__btn composer__btn--stop hidden" title="停止生成">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <rect x="5" y="5" width="14" height="14" rx="2"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="composer-meta">
+                  <span id="charCount" class="char-count">0</span>
+                  <div class="composer-meta__spacer"></div>
+                  <button id="attachBtn" class="composer-content-trigger" title="添加附件">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div id="dropHint" class="drop-hint hidden">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                </svg>
+                <p>松开以上传文件</p>
+              </div>
+            </div>
+
+            <div id="attachmentsBar"></div>
+          </div>
+        </section>
+      </main>
+
+      <!-- 右侧详情面板 -->
+      <aside id="rightPanel">
+        <div class="right-panel-tabs">
+          <button class="rp-tab-btn active" data-rp-tab="preview" title="文件预览">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <span>预览</span>
+          </button>
+          <button class="rp-tab-btn" data-rp-tab="diff" title="代码对比">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 3 21 3 21 8"/>
+              <line x1="4" y1="20" x2="21" y2="3"/>
+              <polyline points="21 16 21 21 16 21"/>
+              <line x1="15" y1="15" x2="21" y2="21"/>
+              <line x1="4" y1="4" x2="9" y2="9"/>
+            </svg>
+            <span>对比</span>
+          </button>
+          <button class="rp-tab-btn" data-rp-tab="terminal" title="终端">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="4 17 10 11 4 5"/>
+              <line x1="12" y1="19" x2="20" y2="19"/>
+            </svg>
+            <span>终端</span>
+            <span class="rp-tab-close" data-close-tab="terminal" title="关闭终端">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </span>
+          </button>
+          <button class="rp-tab-btn" data-rp-tab="logs" title="任务日志">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="8" y1="13" x2="16" y2="13"/>
+              <line x1="8" y1="17" x2="16" y2="17"/>
+            </svg>
+            <span>日志</span>
+          </button>
+          <div class="rp-tab-spacer"></div>
+          <button id="reopenTerminalBtn" class="icon-btn" title="打开终端" style="display:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="4 17 10 11 4 5"/>
+              <line x1="12" y1="19" x2="20" y2="19"/>
+            </svg>
+          </button>
+          <button id="closeRightPanelBtn" class="icon-btn" title="收起">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="right-panel-content">
+          <!-- 文件预览 -->
+          <div id="rpPreview" class="rp-tab-content active">
+            <div class="rp-file-tabs-bar" id="rpFileTabsBar">
+              <div class="rp-file-tabs-scroll" id="rpFileTabsScroll"></div>
+              <div class="rp-file-tabs-actions">
+                <button id="rpCloseAllBtn" class="rp-tab-action" title="关闭全部" style="display:none">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="rp-content"></div>
+          </div>
+          <!-- 代码 Diff -->
+          <div id="rpDiff" class="rp-tab-content">
+            <div class="rp-toolbar">
+              <span class="rp-title">代码对比</span>
+              <div class="flex-row gap-sm">
+                <button id="diffApplyBtn" class="btn btn-secondary btn-sm" title="应用所有修改">应用</button>
+                <button id="diffRevertBtn" class="btn btn-secondary btn-sm" title="撤销全部">撤销</button>
+                <button id="diffSaveBtn" class="btn btn-primary btn-sm" title="保存到原文件">保存</button>
+              </div>
+            </div>
+            <div id="diffView" class="diff-view"></div>
+          </div>
+          <!-- 终端 -->
+          <div id="rpTerminal" class="rp-tab-content">
+            <div class="rp-toolbar">
+              <span class="rp-title">内置终端</span>
+              <div class="flex-row gap-sm">
+                <button id="terminalPauseBtn" class="icon-btn" title="暂停输出">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="6" y="4" width="4" height="16"/>
+                    <rect x="14" y="4" width="4" height="16"/>
+                  </svg>
+                </button>
+                <button id="terminalFollowBtn" class="icon-btn active" title="自动跟随输出">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+                <button id="terminalClearBtn" class="icon-btn" title="清空">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                </button>
+                <button id="terminalCopyBtn" class="icon-btn" title="复制输出">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div id="terminalOutput"></div>
+            <div id="terminalFollowHint" class="terminal-follow-hint" style="display:none">
+              <span>输出已暂停，点击跟随到底部</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </div>
+            <div class="terminal-input-row">
+              <span id="terminalCwd" class="terminal-cwd">~</span>
+              <input id="terminalInput" type="text" placeholder="输入命令...">
+              <button id="terminalSendBtn" class="icon-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13"/>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- 任务日志 -->
+          <div id="rpLogs" class="rp-tab-content">
+            <div class="rp-toolbar">
+              <span class="rp-title">任务执行日志</span>
+              <button id="logsClearBtn" class="icon-btn" title="清空日志">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+              </button>
+            </div>
+            <div id="logsView" class="logs-view"></div>
+          </div>
+        </div>
+
+        <div class="right-panel-resizer" id="rightPanelResizer"></div>
+      </aside>
+    </div>
+
+    <!-- ============== 底部状态栏 ============== -->
+    <footer id="statusBar">
+      <div class="status-item info" id="statusModel">
+        <span class="status-dot"></span>
+        <span class="status-label">模型:</span>
+        <span class="status-value" id="statusModelValue">-</span>
+      </div>
+      <div class="status-item ok" id="statusSandbox">
+        <span class="status-dot"></span>
+        <span class="status-label">沙箱:</span>
+        <span class="status-value" id="statusSandboxValue">安全</span>
+      </div>
+      <div class="status-item" id="statusTask">
+        <span class="status-dot"></span>
+        <span class="status-label">任务:</span>
+        <span class="status-value" id="statusTaskValue">空闲</span>
+      </div>
+      <div class="status-spacer"></div>
+      <div class="status-item" id="statusToken">
+        <span class="status-label">Token:</span>
+        <span class="status-value" id="statusTokenValue">0</span>
+      </div>
+      <div class="status-item clickable ok" id="statusNetwork" title="网络状态">
+        <span class="status-dot"></span>
+        <span class="status-value" id="statusNetworkValue">在线</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ============== 设置弹窗（Tab 化） ============== -->
+  <div id="settingsModal" class="modal hidden">
+    <div class="modal-content modal-content-tabs">
+      <div class="modal-header">
+        <h2>设置</h2>
+        <button id="settingsCloseBtn" class="icon-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body-tabs">
+        <!-- 设置侧边 Tab -->
+        <div class="settings-tabs">
+          <button class="settings-tab active" data-stab="model">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+            </svg>
+            <span>模型</span>
+          </button>
+          <button class="settings-tab" data-stab="interface">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a10 10 0 0 0 0 20z"/>
+            </svg>
+            <span>界面</span>
+          </button>
+          <button class="settings-tab" data-stab="cache">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>
+            <span>缓存</span>
+          </button>
+          <button class="settings-tab" data-stab="sandbox">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span>沙箱</span>
+          </button>
+        </div>
+        <!-- 设置内容 -->
+        <div class="settings-content">
+          <!-- Tab: 模型 -->
+          <div class="settings-pane active" data-spane="model">
+            <div class="settings-section">
+              <h3>API 配置</h3>
+              <div class="form-group">
+                <label>API 地址（兼容 OpenAI 接口）</label>
+                <input id="apiEndpoint" type="text" placeholder="https://api.mimo.com/v1">
+              </div>
+              <div class="form-group">
+                <label>API 密钥</label>
+                <input id="apiKey" type="password" placeholder="sk-...">
+              </div>
+              <div class="form-group model-name-field" style="position:relative;">
+                <label>模型名称</label>
+                <div class="form-row" style="align-items:center;">
+                  <input id="modelName" type="text" placeholder="mimo-v2.5" autocomplete="off" style="flex:1;">
+                  <button id="refreshModelsBtn" type="button" class="btn btn-secondary" style="margin-left:12px;flex-shrink:0;">刷新</button>
+                </div>
+                <div class="checkbox-group" style="margin-top:8px;">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="autoFetchModels" checked>
+                    <span>启动 / 保存设置时自动拉取当前 Key 可用的模型列表</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group half">
+                  <label>温度 (Temperature)</label>
+                  <input id="temperature" type="number" min="0" max="2" step="0.1" value="0.7">
+                </div>
+                <div class="form-group half">
+                  <label>最大 Token</label>
+                  <input id="maxTokens" type="number" min="1" max="128000" value="4096">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>系统提示词</label>
+                <textarea id="systemPrompt" rows="3" placeholder="设置 AI 的行为..."></textarea>
+              </div>
+              <div class="form-group">
+                <button id="settingsTestBtn" class="btn btn-secondary">测试连接</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: 界面 -->
+          <div class="settings-pane" data-spane="interface">
+            <div class="settings-section">
+              <h3>外观</h3>
+              <div class="form-group">
+                <label>主题</label>
+                <div class="theme-options">
+                  <label class="theme-option">
+                    <input type="radio" name="theme" value="dark" checked>
+                    <div class="theme-card theme-dark">
+                      <div class="theme-preview dark"></div>
+                      <span>深色</span>
+                    </div>
+                  </label>
+                  <label class="theme-option">
+                    <input type="radio" name="theme" value="light">
+                    <div class="theme-card theme-light">
+                      <div class="theme-preview light"></div>
+                      <span>浅色</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>字体大小</label>
+                <select id="fontSize">
+                  <option value="12">12px</option>
+                  <option value="13" selected>13px</option>
+                  <option value="14">14px</option>
+                  <option value="15">15px</option>
+                  <option value="16">16px</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>默认布局</label>
+                <div class="checkbox-group">
+                  <label class="checkbox-label"><input type="checkbox" id="layoutShowSidebar" checked> 启动时显示侧边栏</label>
+                  <label class="checkbox-label"><input type="checkbox" id="layoutShowRightPanel"> 启动时显示右侧面板</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: 缓存 -->
+          <div class="settings-pane" data-spane="cache">
+            <div class="settings-section">
+              <h3>缓存管理</h3>
+              <div class="cache-info">
+                <div class="cache-info-row">
+                  <span>话题数据</span>
+                  <span id="cacheTopicsSize" class="cache-size">-</span>
+                </div>
+                <div class="cache-info-row">
+                  <span>附件文件</span>
+                  <span id="cacheAttachmentsSize" class="cache-size">-</span>
+                </div>
+                <div class="cache-info-row">
+                  <span>配置文件</span>
+                  <span id="cacheConfigSize" class="cache-size">-</span>
+                </div>
+                <div class="cache-info-row total">
+                  <span>总占用</span>
+                  <span id="cacheTotalSize" class="cache-size">-</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="checkbox-label"><input type="checkbox" id="autoClearCache"> 关闭应用时自动清空缓存</label>
+              </div>
+              <div class="form-group">
+                <button id="clearCacheBtn" class="btn btn-danger">一键清空缓存</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: 沙箱 -->
+          <div class="settings-pane" data-spane="sandbox">
+            <div class="settings-section">
+              <h3>工作区</h3>
+              <div class="form-group">
+                <label>工作区路径</label>
+                <div class="path-input">
+                  <input id="sandboxPath" type="text" placeholder="C:\Users\...\mimo-workspace">
+                  <button id="browseSandboxBtn" class="btn btn-secondary">浏览</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>允许的工具</label>
+                <div class="checkbox-group">
+                  <label class="checkbox-label"><input type="checkbox" id="toolBash" checked> Bash 命令执行</label>
+                  <label class="checkbox-label"><input type="checkbox" id="toolFileRead" checked> 文件读取</label>
+                  <label class="checkbox-label"><input type="checkbox" id="toolFileWrite" checked> 文件写入</label>
+                  <label class="checkbox-label"><input type="checkbox" id="toolFileEdit" checked> 文件编辑</label>
+                </div>
+              </div>
+            </div>
+            <div class="settings-section">
+              <h3>审批模式 <span class="settings-hint">（对标 Reasonix：Ask / Auto / YOLO）</span></h3>
+              <div class="form-group">
+                <label>工具调用审批姿态</label>
+                <select id="approvalMode" class="settings-select">
+                  <option value="ask">Ask — 逐个询问（安全默认）</option>
+                  <option value="auto">Auto — 自动放行（deny/ask 规则仍生效）</option>
+                  <option value="yolo">YOLO — 全自动（仅 deny 规则生效）</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="checkbox-label"><input type="checkbox" id="permPromptEnabled" checked> 启用工具调用权限提示</label>
+              </div>
+              <div class="form-group">
+                <label class="checkbox-label"><input type="checkbox" id="permHighRiskModal" checked> 高危操作弹出确认框</label>
+              </div>
+            </div>
+            <div class="settings-section">
+              <h3>权限规则 <span class="settings-hint">（每行一条，如 Bash(npm:*) / Edit(docs/**) / git）</span></h3>
+              <div class="form-group">
+                <label>deny — 永远拒绝（优先级最高）</label>
+                <textarea id="ruleDeny" rows="3" placeholder="Bash(rm:*)&#10;Bash(shutdown:*)"></textarea>
+              </div>
+              <div class="form-group">
+                <label>ask — 始终询问（即使 Auto 模式）</label>
+                <textarea id="ruleAsk" rows="2" placeholder="Bash(git push:*)"></textarea>
+              </div>
+              <div class="form-group">
+                <label>allow — 直接放行（持久授权，重启生效）</label>
+                <textarea id="ruleAllow" rows="3" placeholder="Bash(git:*)&#10;Bash(npm:*)&#10;file_read"></textarea>
+              </div>
+            </div>
+            <div class="settings-section">
+              <h3>项目级命令白名单 <span class="settings-hint">（写入工作区 .mimo/permissions.json）</span></h3>
+              <div class="form-group">
+                <label class="checkbox-label"><input type="checkbox" id="permBashAllowAll" checked> 允许全部 Bash 命令（关闭后仅白名单内命令可执行）</label>
+              </div>
+              <div class="form-group">
+                <label>Bash 命令白名单（每行一条，精确匹配）</label>
+                <textarea id="permBashWhitelist" rows="5" placeholder="git status&#10;git log -n 5&#10;npm test"></textarea>
+              </div>
+              <div class="form-group">
+                <label>文件操作权限</label>
+                <div class="checkbox-group">
+                  <label class="checkbox-label"><input type="checkbox" id="permEditAllowed" checked> 允许文件编辑 (Edit)</label>
+                  <label class="checkbox-label"><input type="checkbox" id="permFileWriteAllowed" checked> 允许文件写入 (Write)</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>配置文件位置</label>
+                <input id="permFilePath" type="text" readonly placeholder="工作区/.mimo/permissions.json">
+              </div>
+              <div class="form-group">
+                <button id="permSaveBtn" class="btn btn-primary">保存项目权限</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="settingsSaveBtn" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 计划审批模态框（Plan Mode 门禁） ============== -->
+  <div id="planApprovalModal" class="modal hidden">
+    <div class="modal-content small">
+      <div class="modal-header">
+        <h2>计划审批</h2>
+        <span class="settings-hint">Plan 模式 · 批准后才开始执行</span>
+      </div>
+      <div class="modal-body">
+        <div id="planApprovalText" class="plan-approval-text"></div>
+      </div>
+      <div class="modal-footer">
+        <button id="planApproveBtn" class="btn btn-primary">批准并执行</button>
+        <button id="planReviseBtn" class="btn btn-secondary">修改计划</button>
+        <button id="planExitBtn" class="btn btn-secondary">退出计划模式</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== Ask 问答模态框（Reasonix 风格） ============== -->
+  <div id="askModal" class="modal hidden">
+    <div class="modal-content small">
+      <div class="modal-header">
+        <h2>MiMo 需要你选择</h2>
+      </div>
+      <div class="modal-body" id="askModalBody"></div>
+      <div class="modal-footer">
+        <button id="askSubmitBtn" class="btn btn-primary">提交</button>
+        <button id="askSkipBtn" class="btn btn-secondary">跳过</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 权限确认模态框 ============== -->
+  <div id="permissionModal" class="modal hidden">
+    <div class="modal-content small">
+      <div class="modal-header">
+        <h2>权限请求</h2>
+        <span id="permissionModeTag" class="settings-hint"></span>
+      </div>
+      <div class="modal-body">
+        <div id="permissionTitle" class="permission-title">MiMo 请求执行以下操作：</div>
+        <div id="permissionDetails" class="permission-details"></div>
+        <div id="permissionRuleHint" class="permission-rule-hint"></div>
+      </div>
+      <div class="modal-footer permission-actions">
+        <button id="permissionOnceBtn" class="btn btn-primary">允许一次</button>
+        <button id="permissionSessionBtn" class="btn btn-secondary">本会话允许</button>
+        <button id="permissionAlwaysBtn" class="btn btn-secondary">总是允许</button>
+        <button id="permissionDenyBtn" class="btn btn-danger">拒绝</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 代码全屏查看模态框 -->
+  <div id="codeFullscreenModal" class="modal hidden">
+    <div class="modal-content modal-content-code">
+      <div class="modal-header">
+        <h2 id="codeFullscreenTitle">代码</h2>
+        <button id="codeFullscreenCloseBtn" class="icon-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre id="codeFullscreenContent" class="code-fullscreen-pre"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 容器 -->
+  <div id="toastContainer"></div>
+
+  <!-- 右键菜单 -->
+  <div id="contextMenu" class="context-menu hidden"></div>
+
+  <!-- 分级确认弹窗 -->
+  <div id="confirmModal" class="confirm-modal hidden">
+    <div class="confirm-mask"></div>
+    <div class="confirm-dialog" id="confirmDialog">
+      <div class="confirm-icon" id="confirmIcon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div class="confirm-body">
+        <div class="confirm-title" id="confirmTitle">确认操作</div>
+        <div class="confirm-message" id="confirmMessage">确定要执行此操作吗？</div>
+        <div class="confirm-extra" id="confirmExtra" style="display:none"></div>
+      </div>
+      <div class="confirm-actions">
+        <button id="confirmCancelBtn" class="btn btn-ghost">取消</button>
+        <button id="confirmOkBtn" class="btn btn-primary">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 设置弹窗模型自定义下拉（fixed 定位，避免被父容器裁剪） -->
+  <div id="modelNameDropdown" class="model-dropdown hidden" style="position:fixed;z-index:9999;"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/permission.js"></script>
+  <script src="js/tool-logger.js"></script>
+  <script src="js/filesystem.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/terminal.js"></script>
+  <script src="js/statusbar.js"></script>
+  <script src="js/skills.js"></script>
+  <script src="js/planpanel.js"></script>
+  <script src="js/rightpanel.js"></script>
+  <script src="js/confirm.js"></script>
+  <script src="js/emptystate.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

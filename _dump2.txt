@@ -1,0 +1,13 @@
+标题: 你好 | 消息数: 72
+[60] assistant: content=228字 tools=[] | '好的！我可以帮你写 Python 代码。\n\n请告诉我你需要什么样的 Python 代码呢？比如：\n\n1. **游戏类**'
+[61] user: content=17字 tools=[] | '可以在html界面打开的贪吃蛇游戏'
+[62] assistant: content=20字 tools=[] | '好的！我来为你创建一个完整的贪吃蛇游戏！'
+[63] assistant: content=0字 tools=[] | ''
+[64] user: content=3字 tools=[] | '你好啊'
+[65] assistant: content=0字 tools=[] | ''
+[66] user: content=2字 tools=[] | '你好'
+[67] assistant: content=0字 tools=[] | ''
+[68] user: content=2字 tools=[] | '你好'
+[69] user: content=2字 tools=[] | '你好'
+[70] user: content=2字 tools=[] | '你好'
+[71] assistant: content=483字 tools=[] | '你好！😊\n\n你好呀！我是 **MiMo**，你的代码开发助手。\n\n看到你连续打了几个招呼，是不是在等我回应呀？很高兴见到'
